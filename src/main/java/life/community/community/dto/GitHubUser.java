@@ -3,16 +3,16 @@ package life.community.community.dto;
 import java.io.Serializable;
 
 public class GitHubUser implements Serializable {
-    private Long id;
+    private String id;
     private String name;
     private String bio;
 
 
-    public Long getId() {
+    public String getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(String id) {
         this.id = id;
     }
 
