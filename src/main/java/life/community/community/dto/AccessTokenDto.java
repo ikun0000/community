@@ -1,7 +1,10 @@
 package life.community.community.dto;
 
+import lombok.Data;
+
 import java.io.Serializable;
 
+//@Data
 public class AccessTokenDto implements Serializable {
     private String client_id;
     private String client_secret;

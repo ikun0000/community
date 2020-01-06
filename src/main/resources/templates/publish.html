@@ -52,7 +52,7 @@
             <ul class="nav navbar-nav navbar-right">
                 <li th:if="${ session.user != null }"><a th:href="@{ /publish }">发布</a></li>
                 <li th:unless="${ session.user != null }">
-                    <a th:href="@{ https://github.com/login/oauth/authorize(client_id=${ '0422b4182360f93e910a' }, redirect_uri=${ 'http://localhost:8887/callback' }, scope=${ 'user' }, state=${ #strings.randomAlphanumeric(10) }) }">登陆</a>
+                    <a th:href="@{ https://github.com/login/oauth/authorize(client_id=${ clientID }, redirect_uri=${ redirectUri }, scope=${ 'user' }, state=${ #strings.randomAlphanumeric(10) }) }">登陆</a>
                 </li>
                 <li class="dropdown" th:if="${ session.user != null }">
                     <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"

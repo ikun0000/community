@@ -29,11 +29,14 @@ public class IndexController {
     public String index(HttpServletRequest request, Model model) {
         Cookie[] cookies = request.getCookies();
         User user = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                user = userMapper.getUserByToken(cookie.getValue());
-                request.getSession().setAttribute("user", user);
-                break;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    user = userMapper.getUserByToken(cookie.getValue());
+                    request.getSession().setAttribute("user", user);
+                    break;
+                }
             }
         }
         model.addAttribute("clientID", clientID);

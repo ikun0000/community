@@ -5,6 +5,7 @@ import life.community.community.entity.User;
 import life.community.community.mappers.QuestionMapper;
 import life.community.community.mappers.UserMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,6 +23,12 @@ public class PublishController {
     @Autowired
     private UserMapper userMapper;
 
+    @Value("${github.client.id}")
+    private String clientID;
+
+    @Value("${github.redirect.uri}")
+    private String redirectUri;
+
     @GetMapping("/publish")
     public String getPublish() {
         return "publish";
@@ -33,6 +40,8 @@ public class PublishController {
                               @RequestParam("tag") String tag,
                               HttpServletRequest request,
                               Model model) {
+        model.addAttribute("clientID", clientID);
+        model.addAttribute("redirectUri", redirectUri);
 
         if (title == null || description == null || tag == null ||
         title.isEmpty() || description.isEmpty() || tag.isEmpty()) {
@@ -45,11 +54,14 @@ public class PublishController {
 
         Cookie[] cookies = request.getCookies();
         User user = null;
-        for (Cookie cookie : cookies) {
-            if (cookie.getName().equals("token")) {
-                user = userMapper.getUserByToken(cookie.getValue());
-                request.getSession().setAttribute("user", user);
-                break;
+
+        if (cookies != null) {
+            for (Cookie cookie : cookies) {
+                if (cookie.getName().equals("token")) {
+                    user = userMapper.getUserByToken(cookie.getValue());
+                    request.getSession().setAttribute("user", user);
+                    break;
+                }
             }
         }
 

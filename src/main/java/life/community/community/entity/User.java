@@ -1,8 +1,11 @@
 package life.community.community.entity;
 
 
+import lombok.Data;
+
 import java.util.Date;
 
+//@Data
 public class User {
     private Integer id;
     private String accountID;
@@ -11,6 +14,7 @@ public class User {
     private Date gmtCreate;
     private Date gmtModify;
     private String bio;
+    private String avatarUrl;
 
 
     public Integer getId() {
@@ -69,6 +73,14 @@ public class User {
         this.bio = bio;
     }
 
+    public String getAvatarUrl() {
+        return avatarUrl;
+    }
+
+    public void setAvatarUrl(String avatarUrl) {
+        this.avatarUrl = avatarUrl;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -79,6 +91,7 @@ public class User {
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModify=" + gmtModify +
                 ", bio='" + bio + '\'' +
+                ", avatarUrl='" + avatarUrl + '\'' +
                 '}';
     }
 }
