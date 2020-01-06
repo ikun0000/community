@@ -4,19 +4,20 @@ package life.community.community.entity;
 import java.util.Date;
 
 public class User {
-    private int id;
+    private Integer id;
     private String accountID;
     private String name;
     private String token;
     private Date gmtCreate;
     private Date gmtModify;
+    private String bio;
 
 
-    public int getId() {
+    public Integer getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
@@ -60,6 +61,14 @@ public class User {
         this.gmtModify = gmtModify;
     }
 
+    public String getBio() {
+        return bio;
+    }
+
+    public void setBio(String bio) {
+        this.bio = bio;
+    }
+
     @Override
     public String toString() {
         return "User{" +
@@ -69,6 +78,7 @@ public class User {
                 ", token='" + token + '\'' +
                 ", gmtCreate=" + gmtCreate +
                 ", gmtModify=" + gmtModify +
+                ", bio='" + bio + '\'' +
                 '}';
     }
 }

@@ -8,7 +8,7 @@ spring:
     username: root
     password: 123456
     driver-class-name: com.mysql.cj.jdbc.Driver
-    url: jdbc:mysql://10.10.10.246:3306/xx_community
+    url: jdbc:mysql://192.168.118.130:3306/xx_community
 #    initialization-mode: always
     schema:
       - classpath:static/sql/user.sql
@@ -16,6 +16,6 @@ spring:
 github:
   client:
     id: 0422b4182360f93e910a
-    secret: 257d51b7e871ee266cf20cb60b2ace6b2f4b5414
+    secret: d5ff10a423a34102e11b10425411f78bec36b939
   redirect:
     uri: http://localhost:8887/callback

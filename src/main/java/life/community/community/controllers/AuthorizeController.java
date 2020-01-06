@@ -51,12 +51,13 @@ public class AuthorizeController {
         // 这里获取用户的信息
         GitHubUser gitHubUser = githubProvider.getUser(accessToken);
 
-        if (gitHubUser != null) {
+        if (gitHubUser != null && gitHubUser.getId() != null) {
             // 登陆成功
             // request.getSession().setAttribute("user", gitHubUser);
             User user = new User();
             user.setAccountID(gitHubUser.getId());
             user.setName(gitHubUser.getName());
+            user.setBio(gitHubUser.getBio());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
             userMapper.deleteFromAccountID(user.getAccountID());
