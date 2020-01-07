@@ -1,8 +1,12 @@
 package life.community.community.controllers;
 
 
+import life.community.community.dto.QuestionDto;
+import life.community.community.entity.Question;
 import life.community.community.entity.User;
+import life.community.community.mappers.QuestionMapper;
 import life.community.community.mappers.UserMapper;
+import life.community.community.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -12,12 +16,16 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 public class IndexController {
 
     @Autowired
     private UserMapper userMapper;
+
+    @Autowired
+    private QuestionService questionService;
 
     @Value("${github.client.id}")
     private String clientID;
@@ -39,6 +47,8 @@ public class IndexController {
                 }
             }
         }
+        List<QuestionDto> questionDtoList = questionService.getAllQuestionAndUser();
+        model.addAttribute("questionDtoList", questionDtoList);
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
         return "index";

@@ -10,8 +10,12 @@ spring:
     driver-class-name: com.mysql.cj.jdbc.Driver
     url: jdbc:mysql://10.10.10.246:3306/xx_community
 #    initialization-mode: always
-    schema:
-      - classpath:static/sql/user.sql
+#    schema:
+#      - classpath:static/sql/user.sql
+mybatis:
+  configuration:
+    map-underscore-to-camel-case: true
+
 
 github:
   client:

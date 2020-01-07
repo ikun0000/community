@@ -60,7 +60,7 @@ public class AuthorizeController {
             user.setBio(gitHubUser.getBio());
             String token = UUID.randomUUID().toString();
             user.setToken(token);
-            user.setAvatarUrl(gitHubUser.getAvatar_url());
+            user.setAvatarUrl(gitHubUser.getAvatarUrl());
             userMapper.deleteFromAccountID(user.getAccountID());
             userMapper.addUser(user);
             response.addCookie(new Cookie("token", token));
