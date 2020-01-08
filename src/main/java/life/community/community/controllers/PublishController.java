@@ -30,7 +30,9 @@ public class PublishController {
     private String redirectUri;
 
     @GetMapping("/publish")
-    public String getPublish() {
+    public String getPublish(Model model) {
+        model.addAttribute("clientID", clientID);
+        model.addAttribute("redirectUri", redirectUri);
         return "publish";
     }
 

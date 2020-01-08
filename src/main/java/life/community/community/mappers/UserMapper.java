@@ -16,7 +16,13 @@ public interface UserMapper {
     @Select("select * from user where id = #{ id }")
     User getUserById(Integer id);
 
+    @Select("select * from user where account_id = #{ accountID }")
+    User getUserByAccountId(String accountID);
+
     @Delete("delete from user where account_id = #{ id }")
     void deleteFromAccountID(String id);
+
+    @Update("update user set token = #{ token } where account_id = #{ accountID }")
+    void updateTokenByAccountId(String accountID, String token);
 
 }

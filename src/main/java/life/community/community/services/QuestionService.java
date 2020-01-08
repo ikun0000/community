@@ -1,6 +1,7 @@
 package life.community.community.services;
 
 
+import life.community.community.dto.PaginationDto;
 import life.community.community.dto.QuestionDto;
 import life.community.community.entity.Question;
 import life.community.community.entity.User;
@@ -9,7 +10,6 @@ import life.community.community.mappers.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,6 +21,7 @@ public class QuestionService {
 
     @Autowired
     UserMapper userMapper;
+
 
     public List<QuestionDto> getAllQuestionAndUser() {
         List<Question> questionList = questionMapper.getAllQuestion();
@@ -35,16 +36,6 @@ public class QuestionService {
 
         for (Question question : questionList) {
             questionDto = new QuestionDto();
-//            questionDto.setCommentCount(question.getCommentCount());
-//            questionDto.setCreator(question.getCreator());
-//            questionDto.setDescription(question.getDescription());
-//            questionDto.setLikeCount(question.getLikeCount());
-//            questionDto.setTag(question.getTag());
-//            questionDto.setTitle(question.getTitle());
-//            questionDto.setViewCount(question.getViewCount());
-//            questionDto.setGmtCreate(question.getGmtCreate());
-//            questionDto.setGmtModify(question.setGmtModify());
-//            questionDto.setId(question.getId());
             BeanUtils.copyProperties(question, questionDto);
             user = userMapper.getUserById(question.getCreator());
             questionDto.setUser(user);
@@ -52,6 +43,94 @@ public class QuestionService {
         }
 
         return questionDtoList;
+    }
+
+    public List<QuestionDto> getUserQuestionAndUser(Integer userid) {
+        List<Question> questionList = questionMapper.getUserQuestions(userid);
+
+        if (questionList == null) {
+            return null;
+        }
+
+        List<QuestionDto> questionDtoList = new ArrayList<QuestionDto>();
+        QuestionDto questionDto = null;
+        User user = null;
+
+        for (Question question : questionList) {
+            questionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, questionDto);
+            user = userMapper.getUserById(question.getCreator());
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+
+        return questionDtoList;
+    }
+
+    public List<QuestionDto> getNumberPageData(Integer page) {
+        List<Question> questionList = questionMapper.getQuestionFromIndex((int) Math.ceil(5.0 * (page - 1)));
+
+        if (questionList == null) {
+            return null;
+        }
+
+        List<QuestionDto> questionDtoList = new ArrayList<QuestionDto>();
+        QuestionDto questionDto = null;
+        User user = null;
+
+        for (Question question : questionList) {
+            questionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, questionDto);
+            user = userMapper.getUserById(question.getCreator());
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+
+        return questionDtoList;
+    }
+
+    public List<QuestionDto> getNumberPageDataFromUser(Integer userid, Integer page) {
+        List<Question> questionList = questionMapper.getUserQuestionFromIndex(userid, (int) Math.ceil(5.0 * (page - 1)));
+
+        if (questionList == null) {
+            return null;
+        }
+
+        List<QuestionDto> questionDtoList = new ArrayList<QuestionDto>();
+        QuestionDto questionDto = null;
+        User user = null;
+
+        for (Question question : questionList) {
+            questionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, questionDto);
+            user = userMapper.getUserById(question.getCreator());
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+
+        return questionDtoList;
+    }
+
+    public PaginationDto getPage(Integer page) {
+        PaginationDto paginationDto = new PaginationDto();
+        paginationDto.setCurrentPage(page);         // 这个方法一定要先于setPagination调用，setPagination里面依赖currentPage
+        paginationDto.setQuestionDtoList(getNumberPageData(page));
+
+        Integer totalCount = questionMapper.getItemCount();
+        paginationDto.setPagination(totalCount, page, 5);
+
+        return paginationDto;
+    }
+
+    public PaginationDto getCurrentUserQuestion(Integer id, Integer page) {
+        PaginationDto paginationDto = new PaginationDto();
+        paginationDto.setCurrentPage(page);
+        paginationDto.setQuestionDtoList(getNumberPageDataFromUser(id, page));
+
+        Integer totalCount = questionMapper.getUserQuestionCount(id);
+        paginationDto.setPagination(totalCount, page, 5);
+
+        return paginationDto;
     }
 
 }

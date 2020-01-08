@@ -54,15 +54,25 @@ public class AuthorizeController {
         if (gitHubUser != null && gitHubUser.getId() != null) {
             // 登陆成功
             // request.getSession().setAttribute("user", gitHubUser);
-            User user = new User();
-            user.setAccountID(gitHubUser.getId());
-            user.setName(gitHubUser.getName());
-            user.setBio(gitHubUser.getBio());
+
             String token = UUID.randomUUID().toString();
-            user.setToken(token);
-            user.setAvatarUrl(gitHubUser.getAvatarUrl());
-            userMapper.deleteFromAccountID(user.getAccountID());
-            userMapper.addUser(user);
+
+//            userMapper.deleteFromAccountID(user.getAccountID());
+//            userMapper.addUser(user);
+
+            if (userMapper.getUserByAccountId(gitHubUser.getId()) != null) {
+                userMapper.updateTokenByAccountId(gitHubUser.getId(), token);
+            } else {
+                User user = new User();
+                user.setAccountID(gitHubUser.getId());
+                user.setName(gitHubUser.getName());
+                user.setBio(gitHubUser.getBio());
+                user.setToken(token);
+                user.setAvatarUrl(gitHubUser.getAvatarUrl());
+                userMapper.addUser(user);
+            }
+
+
             response.addCookie(new Cookie("token", token));
             return "redirect:index";
         } else {
