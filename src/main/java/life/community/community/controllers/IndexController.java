@@ -39,20 +39,7 @@ public class IndexController {
 
     @GetMapping({ "/", "/index" })
     public String index(@RequestParam(name = "page", defaultValue = "1") int page,
-                        HttpServletRequest request,
                         Model model) {
-        Cookie[] cookies = request.getCookies();
-        User user = null;
-
-        if (cookies != null) {
-            for (Cookie cookie : cookies) {
-                if (cookie.getName().equals("token")) {
-                    user = userMapper.getUserByToken(cookie.getValue());
-                    request.getSession().setAttribute("user", user);
-                    break;
-                }
-            }
-        }
 
         if (page < 1 || page > Math.ceil(questionMapper.getItemCount() / 5.0)) {
             page = 1;

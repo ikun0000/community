@@ -57,9 +57,6 @@ public class AuthorizeController {
 
             String token = UUID.randomUUID().toString();
 
-//            userMapper.deleteFromAccountID(user.getAccountID());
-//            userMapper.addUser(user);
-
             if (userMapper.getUserByAccountId(gitHubUser.getId()) != null) {
                 userMapper.updateTokenByAccountId(gitHubUser.getId(), token);
             } else {
