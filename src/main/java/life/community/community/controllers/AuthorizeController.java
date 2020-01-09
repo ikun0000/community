@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -56,21 +55,23 @@ public class AuthorizeController {
             // request.getSession().setAttribute("user", gitHubUser);
 
             String token = UUID.randomUUID().toString();
+            User user = new User();
+            user.setAccountID(gitHubUser.getId());
+            user.setName(gitHubUser.getName());
+            user.setBio(gitHubUser.getBio());
+            user.setToken(token);
+            user.setAvatarUrl(gitHubUser.getAvatarUrl());
 
             if (userMapper.getUserByAccountId(gitHubUser.getId()) != null) {
                 userMapper.updateTokenByAccountId(gitHubUser.getId(), token);
             } else {
-                User user = new User();
-                user.setAccountID(gitHubUser.getId());
-                user.setName(gitHubUser.getName());
-                user.setBio(gitHubUser.getBio());
-                user.setToken(token);
-                user.setAvatarUrl(gitHubUser.getAvatarUrl());
                 userMapper.addUser(user);
             }
 
-
-            response.addCookie(new Cookie("token", token));
+            request.getSession().setAttribute("user", user);
+            Cookie cookieToken = new Cookie("token", token);
+            cookieToken.setMaxAge(7*24*60*60);
+            response.addCookie(cookieToken);
             return "redirect:index";
         } else {
             // 登陆失败
