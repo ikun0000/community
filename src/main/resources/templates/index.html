@@ -46,7 +46,9 @@
                     </a>
                 </div>
                 <div class="media-body">
-                    <h4 class="media-heading" th:text="${ questionDto.title }"></h4>
+                    <h4 class="media-heading">
+                        <a th:href="@{ /question/{id}(id=${ questionDto.id }) }" th:text="${ questionDto.title }"></a>
+                    </h4>
                     <span style="color: #999">[[ ${ questionDto.commentCount } ]]个回复 | [[ ${ questionDto.viewCount } ]]次浏览 | [[ ${ questionDto.likeCount } ]]人喜欢 | 提问时间：[[ ${ #dates.format(questionDto.gmtCreate, 'yyyy-MM-dd HH:mm') } ]]</span>
                 </div>
             </div>

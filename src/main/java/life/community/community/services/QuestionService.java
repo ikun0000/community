@@ -133,4 +133,28 @@ public class QuestionService {
         return paginationDto;
     }
 
+    public QuestionDto getQuestionDtoByQuestionId(Integer id) {
+        QuestionDto questionDto = new QuestionDto();
+        Question question = questionMapper.getQuestionById(id);
+
+        if (question != null) {
+            User user = userMapper.getUserById(question.getCreator());
+
+            BeanUtils.copyProperties(question, questionDto);
+            questionDto.setUser(user);
+
+            return questionDto;
+
+        }
+        return null;
+    }
+
+    public void addNewQuestionOrUpdateQuestion(Question question) {
+        if (question.getId() == null) {
+            questionMapper.addNewQuestion(question);
+        } else {
+            questionMapper.updateQuestionById(question);
+        }
+
+    }
 }

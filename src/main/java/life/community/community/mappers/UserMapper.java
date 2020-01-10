@@ -4,6 +4,8 @@ package life.community.community.mappers;
 import life.community.community.entity.User;
 import org.apache.ibatis.annotations.*;
 
+import java.util.Date;
+
 @Mapper
 public interface UserMapper {
 
@@ -25,4 +27,6 @@ public interface UserMapper {
     @Update("update user set token = #{ token } where account_id = #{ accountID }")
     void updateTokenByAccountId(String accountID, String token);
 
+    @Update("update user set token = #{ token }, name = #{ name }, token = #{ token }, gmt_modify = now(), bio = #{ bio }, avatar_url = #{ avatarUrl } where account_id = #{ accountID }")
+    void updateAllByAccountId(User user);
 }

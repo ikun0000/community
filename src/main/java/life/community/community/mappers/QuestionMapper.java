@@ -4,6 +4,7 @@ import life.community.community.entity.Question;
 import org.apache.ibatis.annotations.Insert;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
+import org.apache.ibatis.annotations.Update;
 
 import java.util.List;
 
@@ -30,5 +31,11 @@ public interface QuestionMapper {
 
     @Select("select * from question where creator = #{ userid } limit #{ offset }, 5")
     List<Question> getUserQuestionFromIndex(Integer userid, Integer offset);
+
+    @Select("select * from question where id = #{ id }")
+    Question getQuestionById(Integer id);
+
+    @Update("update question set title = #{ title }, description = #{ description }, comment_count = #{ commentCount }, view_count = #{ viewCount }, like_count = #{ likeCount }, gmt_modify = now() where id = #{id}")
+    void updateQuestionById(Question question);
 
 }
