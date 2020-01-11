@@ -10,6 +10,8 @@ import life.community.community.mappers.UserMapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -156,5 +158,13 @@ public class QuestionService {
             questionMapper.updateQuestionById(question);
         }
 
+    }
+
+    @Transactional
+    public void incViewCount(Integer id) {
+        Question question = questionMapper.getQuestionById(id);
+        int viewCount = question.getViewCount();
+        question.setViewCount(viewCount + 1);
+        questionMapper.updateQuestionById(question);
     }
 }

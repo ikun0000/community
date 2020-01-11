@@ -14,9 +14,8 @@
     <div class="row">
         <div class="col-md-1"></div>
         <div class="col-md-10 jumbotron">
-            <h1 th:text="${ status } + '&nbsp;&nbsp;' + ${ error }" ></h1>
-            <p th:text="${ message }"></p>
-            <p th:text="${ timestamp }"></p>
+            <h1 th:text="${ message }"></h1>
+            <p th:text="${ warnmsg }"></p>
             <p><a class="btn btn-primary btn-lg" th:href="@{ /index }" role="button">back</a></p>
         </div>
         <div class="col-md-1"></div>

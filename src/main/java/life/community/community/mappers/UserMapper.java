@@ -4,8 +4,6 @@ package life.community.community.mappers;
 import life.community.community.entity.User;
 import org.apache.ibatis.annotations.*;
 
-import java.util.Date;
-
 @Mapper
 public interface UserMapper {
 

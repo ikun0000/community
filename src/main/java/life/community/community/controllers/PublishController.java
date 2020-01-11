@@ -3,7 +3,6 @@ package life.community.community.controllers;
 import life.community.community.dto.QuestionDto;
 import life.community.community.entity.Question;
 import life.community.community.entity.User;
-import life.community.community.mappers.QuestionMapper;
 import life.community.community.mappers.UserMapper;
 import life.community.community.services.QuestionService;
 import org.jetbrains.annotations.NotNull;

@@ -2,6 +2,8 @@ package life.community.community.controllers;
 
 
 import life.community.community.dto.QuestionDto;
+import life.community.community.exceptions.CustomizeErrorCode;
+import life.community.community.exceptions.QuestionNotFoundException;
 import life.community.community.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -21,8 +23,14 @@ public class QuestionController {
                            Model model) {
 
         QuestionDto questionDto = questionService.getQuestionDtoByQuestionId(id);
-        model.addAttribute("questionDto", questionDto);
 
+        if (questionDto == null) {
+            throw new QuestionNotFoundException(CustomizeErrorCode.QUESTION_NOT_FOUND);
+        }
+
+        questionService.incViewCount(questionDto.getId());
+        questionDto.setViewCount(questionDto.getViewCount() + 1);
+        model.addAttribute("questionDto", questionDto);
         return "question";
     }
 }
