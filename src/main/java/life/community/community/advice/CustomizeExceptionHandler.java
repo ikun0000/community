@@ -1,10 +1,14 @@
 package life.community.community.advice;
 
+import life.community.community.dto.ResultDto;
+import life.community.community.exceptions.CustomizeException;
 import life.community.community.exceptions.QuestionNotFoundException;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.http.HttpStatus;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
@@ -12,14 +16,20 @@ import javax.servlet.http.HttpServletRequest;
 public class CustomizeExceptionHandler {
 
     @ExceptionHandler(QuestionNotFoundException.class)
-    ModelAndView handle(HttpServletRequest request, Throwable ex, Model model) {
-        model.addAttribute("message",  "你要的文章没有找到");
+    ModelAndView handleQuestionNotFoundException(HttpServletRequest request, @NotNull Throwable ex, @NotNull Model model) {
+        model.addAttribute("message", ex.getMessage());
         model.addAttribute("warnmsg", "网络安全法警告");
         return new ModelAndView("exception");
     }
 
+    @ExceptionHandler(CustomizeException.class)
+    @ResponseBody
+    ResultDto handleCustomizeException(HttpServletRequest request, CustomizeException ex) {
+         return ResultDto.errorOf(ex);
+    }
+
     @ExceptionHandler(Exception.class)
-    ModelAndView unknowException(HttpServletRequest request, Throwable ex, Model model) {
+    ModelAndView unknowException(HttpServletRequest request, Throwable ex, @NotNull Model model) {
         model.addAttribute("message", "无法处理的异常");
         model.addAttribute("warnmsg", "网络安全法警告");
         return new ModelAndView("exception");

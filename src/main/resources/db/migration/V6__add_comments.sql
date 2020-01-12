@@ -1,0 +1,1 @@
+ALTER TABLE `comment` ADD `comments` VARCHAR(200) NULL;

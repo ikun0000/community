@@ -167,4 +167,12 @@ public class QuestionService {
         question.setViewCount(viewCount + 1);
         questionMapper.updateQuestionById(question);
     }
+
+    @Transactional
+    public void incCommentCount(Integer id) {
+        Question question = questionMapper.getQuestionById(id);
+        int commentCount = question.getCommentCount();
+        question.setCommentCount(commentCount + 1);
+        questionMapper.updateQuestionById(question);
+    }
 }

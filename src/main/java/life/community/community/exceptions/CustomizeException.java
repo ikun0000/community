@@ -1,12 +1,13 @@
 package life.community.community.exceptions;
 
-public class QuestionNotFoundException extends RuntimeException {
+public class CustomizeException extends RuntimeException {
     private String message;
     private Integer code;
 
-    public QuestionNotFoundException(ICustomizeErrorCode iCustomizeErrorCode) {
-        this.code = iCustomizeErrorCode.getCode();
+
+    public CustomizeException(ICustomizeErrorCode iCustomizeErrorCode) {
         message = iCustomizeErrorCode.getMessage();
+        code = iCustomizeErrorCode.getCode();
     }
 
     @Override
