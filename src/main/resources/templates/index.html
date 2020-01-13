@@ -25,6 +25,17 @@
 
     </style>
 
+    <script>
+        window.onload = function() {
+            var closeble = window.localStorage.getItem("closeble");
+
+            if (closeble == "true") {
+                window.localStorage.removeItem("closeble");
+            }
+
+        };
+    </script>
+
 </head>
 <body>
 

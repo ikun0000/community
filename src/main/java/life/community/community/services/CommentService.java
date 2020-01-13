@@ -1,14 +1,21 @@
 package life.community.community.services;
+import life.community.community.dto.CommentDto;
 import life.community.community.entity.Comment;
 import life.community.community.entity.Question;
+import life.community.community.entity.User;
 import life.community.community.enums.CommentTypeEnum;
 import life.community.community.exceptions.CustomizeErrorCode;
 import life.community.community.exceptions.CustomizeException;
 import life.community.community.mappers.CommentMapper;
 import life.community.community.mappers.QuestionMapper;
+import life.community.community.mappers.UserMapper;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class CommentService {
@@ -21,6 +28,9 @@ public class CommentService {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private UserMapper userMapper;
 
 
     @Transactional
@@ -58,5 +68,24 @@ public class CommentService {
             commentMapper.updateCommentById(comment);
         }
 
+    }
+
+    public List<CommentDto> getCommentsByQuestionId(Integer id) {
+        List<Comment> firstLevelReviewByQuestionId = commentMapper.getFirstLevelReviewByQuestionId(id);
+        List<CommentDto> commentDtoList = new ArrayList<CommentDto>();
+        CommentDto commentDto = null;
+        if (firstLevelReviewByQuestionId == null) {
+            return null;
+        }
+
+        for (Comment comment : firstLevelReviewByQuestionId) {
+            commentDto = new CommentDto();
+            BeanUtils.copyProperties(comment, commentDto);
+            User user = userMapper.getUserById(comment.getCommentator());
+            commentDto.setUser(user);
+            commentDtoList.add(commentDto);
+        }
+
+        return commentDtoList;
     }
 }

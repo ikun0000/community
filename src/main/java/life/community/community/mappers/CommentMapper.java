@@ -17,6 +17,9 @@ public interface CommentMapper {
     @Select("select * from comment where type = 1")
     List<Comment> getAllFirstLevelReview();
 
+    @Select("select * from comment where type = 1 and parent_id = #{ parentId }")
+    List<Comment> getFirstLevelReviewByQuestionId(Integer parentId);
+
     @Select("select * from comment where type = 2 and parent_id = #{ parentId }")
     List<Comment> getSecondaryReviewByParentId(Integer parentId);
 

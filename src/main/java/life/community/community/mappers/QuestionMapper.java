@@ -13,7 +13,7 @@ public interface QuestionMapper {
     @Insert("insert into question (title, description, creator, comment_count, view_count, like_count, tag) values (#{title}, #{description}, #{creator}, #{commentCount}, #{viewCount}, #{likeCount}, #{tag})")
     void addNewQuestion(Question question);
 
-    @Select("select * from question")
+    @Select("select * from question order by gmt_create desc")
     List<Question> getAllQuestion();
 
     @Select("select * from question where creator = #{ userid }")
@@ -25,10 +25,10 @@ public interface QuestionMapper {
     @Select("select count(id) from question")
     int getItemCount();
 
-    @Select("select * from question limit #{ offset }, 5")
+    @Select("select * from question order by gmt_create desc limit #{ offset }, 5")
     List<Question> getQuestionFromIndex(Integer offset);
 
-    @Select("select * from question where creator = #{ userid } limit #{ offset }, 5")
+    @Select("select * from question where creator = #{ userid } order by gmt_create desc limit #{ offset }, 5")
     List<Question> getUserQuestionFromIndex(Integer userid, Integer offset);
 
     @Select("select * from question where id = #{ id }")

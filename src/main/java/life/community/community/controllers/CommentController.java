@@ -1,7 +1,7 @@
 package life.community.community.controllers;
 
 
-import life.community.community.dto.CommentDto;
+import life.community.community.dto.CommentDtoCreate;
 import life.community.community.dto.ResultDto;
 import life.community.community.entity.Comment;
 import life.community.community.entity.User;
@@ -20,7 +20,7 @@ public class CommentController {
     private CommentService commentService;
 
     @PostMapping("/comment")
-    public Object post(@RequestBody CommentDto commentDto,
+    public Object post(@RequestBody CommentDtoCreate commentDtoCreate,
                        HttpServletRequest request) {
 
         User user = (User) request.getSession().getAttribute("user");
@@ -29,9 +29,9 @@ public class CommentController {
         }
 
         Comment comment = new Comment();
-        comment.setType(commentDto.getType());
-        comment.setParentId(commentDto.getParentId());
-        comment.setComments(commentDto.getContext());
+        comment.setType(commentDtoCreate.getType());
+        comment.setParentId(commentDtoCreate.getParentId());
+        comment.setComments(commentDtoCreate.getContext());
         comment.setCommentator(user.getId());
         commentService.addNewComment(comment);
         return ResultDto.successOf();

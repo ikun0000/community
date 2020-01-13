@@ -30,6 +30,10 @@ public class SectionInterceptor implements HandlerInterceptor {
             }
         }
 
+        if (request.getRequestURI().equals("/comment")) {
+            return true;
+        }
+
         response.sendRedirect("/index");
         return true;
     }

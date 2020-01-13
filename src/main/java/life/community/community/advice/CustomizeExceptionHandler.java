@@ -30,7 +30,7 @@ public class CustomizeExceptionHandler {
 
     @ExceptionHandler(Exception.class)
     ModelAndView unknowException(HttpServletRequest request, Throwable ex, @NotNull Model model) {
-        model.addAttribute("message", "无法处理的异常");
+            model.addAttribute("message", "无法处理的异常");
         model.addAttribute("warnmsg", "网络安全法警告");
         return new ModelAndView("exception");
     }
