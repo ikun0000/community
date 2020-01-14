@@ -69,12 +69,12 @@
                         <div>
                             <!-- 点赞按钮 -->
                             <a href="#" style="color: #999;">
-                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 赞
+                                <span class="glyphicon glyphicon-thumbs-up" aria-hidden="true"></span> 赞 [[ ${ commentDto.likeCount } ]]
                             </a>
                             &nbsp
                             <!-- 回复按钮 -->
                             <a href="#" style="color: #999;" th:data-id="${ commentDto.id }" onclick="callapseComments(this)">
-                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> 评论
+                                <span class="glyphicon glyphicon-comment" aria-hidden="true"></span> 评论 [[ ${ commentDto.commentCount } ]]
                             </a>
                             <!-- 发表日期 -->
                             <span style="color: #999;" class="pull-right" th:text="${ #dates.format(commentDto.gmtCreate, 'yyyy-MM-dd HH:mm') }"></span>

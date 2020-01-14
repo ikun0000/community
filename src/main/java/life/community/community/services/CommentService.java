@@ -70,6 +70,16 @@ public class CommentService {
 
     }
 
+    @Transactional
+    public void incCommentCount(Integer id) {
+        Comment comment = commentMapper.getCommentById(id);
+
+        if (comment != null) {
+            comment.setCommentCount(comment.getCommentCount() + 1);
+            commentMapper.updateCommentById(comment);
+        }
+    }
+
     public List<CommentDto> getCommentsByQuestionId(Integer id) {
         List<Comment> firstLevelReviewByQuestionId = commentMapper.getFirstLevelReviewByQuestionId(id);
         List<CommentDto> commentDtoList = new ArrayList<CommentDto>();

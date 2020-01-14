@@ -26,7 +26,7 @@ public interface CommentMapper {
     @Select("select * from comment where id = #{ id }")
     Comment getCommentById(Integer id);
 
-    @Update("update comment set like_count = #{ likeCount }, comments = #{ comments }, gmt_modify = now() where id = #{ id }")
+    @Update("update comment set comment_count = #{ commentCount }, like_count = #{ likeCount }, comments = #{ comments }, gmt_modify = now() where id = #{ id }")
     void updateCommentById(Comment comment);
 
     @Delete("delete from comment where id = #{ id }")

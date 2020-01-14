@@ -46,6 +46,7 @@ public class CommentController {
     @GetMapping("/comment/{id}")
     public ResultDto post2(@PathVariable("id") Integer id ) {
         List<CommentDto> resultDtoList = commentService.getCommentsByCommentId(id);
+        commentService.incCommentCount(id);
         return ResultDto.successOf(resultDtoList);
     }
 }

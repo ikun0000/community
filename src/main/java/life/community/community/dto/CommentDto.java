@@ -15,5 +15,6 @@ public class CommentDto {
     private Date gmtModify;
     private Integer likeCount;
     private String comments;
+    private Integer commentCount;
     private User user;
 }
