@@ -88,4 +88,23 @@ public class CommentService {
 
         return commentDtoList;
     }
+
+    public List<CommentDto> getCommentsByCommentId(Integer id) {
+        List<Comment> secondaryReviewByParentId = commentMapper.getSecondaryReviewByParentId(id);
+        List<CommentDto> commentDtoList = new ArrayList<CommentDto>();
+        CommentDto commentDto = null;
+        if (secondaryReviewByParentId == null) {
+            return null;
+        }
+
+        for (Comment comment : secondaryReviewByParentId) {
+            commentDto = new CommentDto();
+            BeanUtils.copyProperties(comment, commentDto);
+            User user = userMapper.getUserById(comment.getCommentator());
+            commentDto.setUser(user);
+            commentDtoList.add(commentDto);
+        }
+
+        return commentDtoList;
+    }
 }
