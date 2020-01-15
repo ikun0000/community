@@ -1,5 +1,6 @@
 package life.community.community.services;
 import life.community.community.dto.CommentDto;
+import life.community.community.dto.QuestionDto;
 import life.community.community.entity.Comment;
 import life.community.community.entity.Question;
 import life.community.community.entity.User;

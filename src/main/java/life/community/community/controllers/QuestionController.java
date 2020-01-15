@@ -31,15 +31,16 @@ public class QuestionController {
                            Model model) {
 
         QuestionDto questionDto = questionService.getQuestionDtoByQuestionId(id);
-
         if (questionDto == null) {
             throw new QuestionNotFoundException(CustomizeErrorCode.QUESTION_NOT_FOUND);
         }
 
+        List<QuestionDto> relateQuestionDtos = questionService.getLikeTagQuestions(questionDto);
         List<CommentDto> commentDtoList = commentService.getCommentsByQuestionId(id);
 
         questionService.incViewCount(questionDto.getId());
         questionDto.setViewCount(questionDto.getViewCount() + 1);
+        model.addAttribute("relateQuestionDtos", relateQuestionDtos);
         model.addAttribute("commentDtoList", commentDtoList);
         model.addAttribute("questionDto", questionDto);
         return "question";

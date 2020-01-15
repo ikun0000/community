@@ -1,0 +1,6 @@
+CREATE TABLE IF NOT EXISTS `taglib`
+(
+    `id` INT PRIMARY KEY AUTO_INCREMENT,
+    `type` INT DEFAULT 0,
+    `tagname` VARCHAR(30) NOT NULL
+) ENGINE=InnoDB default CHARSET=utf8;

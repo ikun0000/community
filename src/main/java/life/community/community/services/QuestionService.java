@@ -175,4 +175,24 @@ public class QuestionService {
         question.setCommentCount(commentCount + 1);
         questionMapper.updateQuestionById(question);
     }
+
+    public List<QuestionDto> getLikeTagQuestions(QuestionDto questionDto) {
+        List<QuestionDto> resultQuestionDto = new ArrayList<QuestionDto>();
+        List<Question> questionsByRegexpAndExceptId = questionMapper.getQuestionsByRegexpAndExceptId(questionDto.getTag().trim().replaceAll(",", "|"), questionDto.getId());
+
+        if (questionsByRegexpAndExceptId == null) {
+            return null;
+        }
+
+        QuestionDto tmpQuestionDto = null;
+        for (Question question : questionsByRegexpAndExceptId) {
+            tmpQuestionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, tmpQuestionDto);
+            User user = userMapper.getUserById(question.getCreator());
+            tmpQuestionDto.setUser(user);
+            resultQuestionDto.add(tmpQuestionDto);
+        }
+
+        return resultQuestionDto;
+    }
 }

@@ -34,6 +34,12 @@ public interface QuestionMapper {
     @Select("select * from question where id = #{ id }")
     Question getQuestionById(Integer id);
 
+    @Select("select * from question where tag regexp #{ reg } and id != #{ id }")
+    List<Question> getQuestionsByRegexpAndExceptId(String reg, Integer id);
+
+    @Select("select * from question where title like concat('%', #{ search }, '%') or description like concat('%', #{ search }, '%')")
+    List<Question> getSearchQuestion(String search);
+
     @Update("update question set title = #{ title }, description = #{ description }, comment_count = #{ commentCount }, view_count = #{ viewCount }, like_count = #{ likeCount }, gmt_modify = now() where id = #{id}")
     void updateQuestionById(Question question);
 

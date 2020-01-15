@@ -5,6 +5,7 @@ import life.community.community.entity.Question;
 import life.community.community.entity.User;
 import life.community.community.mappers.UserMapper;
 import life.community.community.services.QuestionService;
+import life.community.community.services.TagLibService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -22,6 +23,9 @@ public class PublishController {
     @Autowired
     private QuestionService questionService;
 
+    @Autowired
+    private TagLibService tagLibService;
+
     @Value("${github.client.id}")
     private String clientID;
 
@@ -32,6 +36,11 @@ public class PublishController {
     public String getPublish(@NotNull Model model) {
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
+
+        model.addAttribute("title", "");
+        model.addAttribute("description", "");
+        model.addAttribute("tag", "");
+        model.addAttribute("taglib", tagLibService.getAllTag());
         return "publish";
     }
 
@@ -50,7 +59,7 @@ public class PublishController {
         model.addAttribute("description", question.getDescription());
         model.addAttribute("tag", question.getTag());
         model.addAttribute("id", question.getId());
-
+        model.addAttribute("taglib", tagLibService.getAllTag());
         return "publish";
     }
 
@@ -70,6 +79,7 @@ public class PublishController {
             model.addAttribute("description", description);
             model.addAttribute("tag", tag);
             model.addAttribute("warn", "内容不完整");
+            model.addAttribute("taglib", tagLibService.getAllTag());
             return "publish";
         }
 

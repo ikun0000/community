@@ -12,7 +12,9 @@
 
     <style>
         body {
-            background-color: #eee
+            background: url(/img/paper.gif);
+            background-position: left top;
+            background-repeat: repeat;
         }
 
         #mainbody {
@@ -21,6 +23,10 @@
             margin-left: 100px;
             margin-right: 100px;
             margin-bottom: 40px;
+        }
+
+        .box {
+            box-shadow: 10px 10px 5px #888888;
         }
 
     </style>
@@ -34,7 +40,7 @@
 
 <div class="container-fluid" id="mainbody">
 
-    <div class="row">
+    <div class="row box">
         <div class="col-md-9">
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> [[ ${ sectionname } ]]</h2>
 
@@ -49,6 +55,10 @@
                         <a th:href="@{ /question/{id}(id=${ questionDto.id }) }" th:text="${ questionDto.title }"></a>
                     </h4>
                     <span style="color: #999">[[ ${ questionDto.commentCount } ]]个回复 | [[ ${ questionDto.viewCount } ]]次浏览 | [[ ${ questionDto.likeCount } ]]人喜欢 | 提问时间：[[ ${ #dates.format(questionDto.gmtCreate, 'yyyy-MM-dd HH:mm') } ]]</span>
+                    <br>
+                    <a style="color: #999;" th:href="@{ /publish/{id}(id=${ questionDto.id }) }">
+                        <span class="glyphicon glyphicon-edit"></span> 编辑
+                    </a>
                 </div>
             </div>
 

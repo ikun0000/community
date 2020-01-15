@@ -9,11 +9,13 @@
 
     <script src="https://cdn.jsdelivr.net/npm/html5shiv@3.7.3/dist/html5shiv.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/respond.js@1.4.2/dest/respond.min.js"></script>
-
+    <script src="/js/publish.js"></script>
 
     <style>
         body {
-            background-color: #eee
+            background: url(/img/paper.gif);
+            background-position: left top;
+            background-repeat: repeat;
         }
 
         #mainbody {
@@ -23,6 +25,11 @@
             margin-right: 100px;
             margin-bottom: 40px;
         }
+
+        .box {
+            box-shadow: 10px 10px 5px #888888;
+        }
+
     </style>
 </head>
 <body>
@@ -40,7 +47,7 @@
 
 <div class="container-fluid" id="mainbody">
 
-    <div class="row">
+    <div class="row box">
         <div class="col-md-9">
             <div class="alert alert-warning" role="alert" th:if="${ warn }">[[ ${ warn } ]]</div>
 
@@ -61,7 +68,18 @@
                 <br>
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
-                    <input name="tag" type="text" class="form-control" id="tag" placeholder="问题标题..." th:value="${ tag }">
+                    <input onclick="toggleTags()" name="tag" type="text" class="form-control" readonly id="tag" placeholder="问题标签..." th:value="${ tag }">
+                    <br>
+                    <div id="tags" class="col-md-9 panel panel-default" style="display: none; line-height: 30px">
+                        <div class="panel-body">
+                            <span style="margin: 5px;" th:if="${ taglib != null }" th:each="atag : ${ taglib }" >
+                            <span th:if="!${ #strings.contains(tag, atag.tagName) }" onclick="selectTag(this)" class="label label-info">
+                                <span style="margin-right: 5px" class="glyphicon glyphicon-tag"></span>
+                                [[ ${ atag.tagName } ]]
+                            </span>
+                            </span>
+                        </div>
+                    </div>
                 </div>
                 <br>
                 <div class="form-group">
@@ -75,7 +93,7 @@
             <br>
         </div>
         <div class="col-md-3">
-            <h2><span class="glyphicon glyphicon-header" aria-hidden="true"></span> 问题发起指南</h2>
+            <h2><span class="glyphicon glyphicon-book" aria-hidden="true"></span> 问题发起指南</h2>
             <hr>
             <br>
             <br>
