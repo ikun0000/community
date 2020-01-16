@@ -3,6 +3,7 @@ package life.community.community.controllers;
 
 import life.community.community.dto.PaginationDto;
 import life.community.community.mappers.QuestionMapper;
+import life.community.community.services.NotificationService;
 import life.community.community.services.QuestionService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,6 +20,7 @@ public class IndexController {
 
     @Autowired
     private QuestionMapper questionMapper;
+
 
     @Value("${github.client.id}")
     private String clientID;

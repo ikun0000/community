@@ -1,10 +1,10 @@
 package life.community.community.services;
 import life.community.community.dto.CommentDto;
-import life.community.community.dto.QuestionDto;
 import life.community.community.entity.Comment;
 import life.community.community.entity.Question;
 import life.community.community.entity.User;
 import life.community.community.enums.CommentTypeEnum;
+import life.community.community.enums.NotificationTypeEnum;
 import life.community.community.exceptions.CustomizeErrorCode;
 import life.community.community.exceptions.CustomizeException;
 import life.community.community.mappers.CommentMapper;
@@ -14,7 +14,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -33,6 +32,9 @@ public class CommentService {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
 
     @Transactional
     public void addNewComment(Comment comment) {
@@ -49,12 +51,15 @@ public class CommentService {
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
             }
+            incCommentCount(dbComment.getId());
+            notificationService.addANotification(NotificationTypeEnum.REPLY_COMMENT.getType(), comment.getCommentator(), dbComment.getCommentator(), comment.getParentId());
         } else {
             Question question = questionMapper.getQuestionById(comment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
             }
             questionService.incCommentCount(question.getId());
+            notificationService.addANotification(NotificationTypeEnum.REPLY_QUESTION.getType(), comment.getCommentator(), question.getCreator(), comment.getParentId());
         }
 
         commentMapper.addNewComment(comment);

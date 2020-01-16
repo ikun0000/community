@@ -36,6 +36,8 @@
 
     </style>
 
+    <link rel="stylesheet" href="/css/editormd.preview.css" />
+
 </head>
 <body>
 
@@ -53,8 +55,10 @@
             <span style="color: #999">作者：[[ ${ questionDto.user != null } ? ${ questionDto.user.name } : '匿名用户' ]] | 阅读数：[[ ${ questionDto.viewCount } ]] | 发布时间：[[ ${ #dates.format(questionDto.gmtCreate, 'yyyy-MM-dd HH:mm') } ]]</span>
             <hr>
 
-            <div th:text="${ questionDto.description }">
+            <div id="question-markdown-view">
+                <textarea style="display:none;">[[ ${ questionDto.description } ]]</textarea>
             </div>
+
             <hr>
 
             <div>
@@ -187,5 +191,17 @@
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
 <script src="/js/community.js"></script>
+<script src="/js/editormd.js"></script>
+<script src="/lib/marked.min.js"></script>
+<script src="/lib/prettify.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+	    var testView = editormd.markdownToHTML("question-markdown-view", {
+            // markdown : "[TOC]\n### Hello world!\n## Heading 2", // Also, you can dynamic set Markdown text
+            // htmlDecode : true,  // Enable / disable HTML tag encode.
+            // htmlDecode : "style,script,iframe",  // Note: If enabled, you should filter some dangerous HTML tags for website security.
+        });
+    });
+</script>
 </body>
 </html>

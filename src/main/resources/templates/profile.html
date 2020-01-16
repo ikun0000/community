@@ -41,7 +41,7 @@
 <div class="container-fluid" id="mainbody">
 
     <div class="row box">
-        <div class="col-md-9">
+        <div th:if="${ #strings.equals(section, 'question') }" class="col-md-9">
             <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> [[ ${ sectionname } ]]</h2>
 
             <div class="media" th:each="questionDto : ${ paginationDto.questionDtoList }">
@@ -97,11 +97,29 @@
 
         </div>
 
+        <div th:if="${ #strings.equals(section, 'reply') }" class="col-md-9">
+            <h2><span class="glyphicon glyphicon-th-list" aria-hidden="true"></span> [[ ${ sectionname } ]]</h2>
+
+            <div class="panel panel-info" th:each="unreadNotification : ${ unreadNotifications }">
+                <div class="panel-body">
+                    <p>
+                        [[ ${ unreadNotification.user.name } ]]
+                        [[ ${ unreadNotification.notifyType } ]]
+                        <a th:href="@{ /notification/{nid}(nid=${ unreadNotification.id }, qid=${ unreadNotification.question.id }) }">
+                            [[ ${ unreadNotification.type == 1 ? unreadNotification.question.title : unreadNotification.comment.comments } ]]
+                        </a>
+                        <span style="color: #999; float: right;" th:text="${ #dates.format(unreadNotification.gmtCreate, 'yyyy-MM-dd') }"></span>
+                    </p>
+                </div>
+            </div>
+
+        </div>
+
         <div class="col-md-3">
             <br>
             <div class="list-group">
                 <a th:href="@{ /profile/question }" th:class="${ section } == 'question' ? 'list-group-item active' : 'list-group-item'">我的问题</a>
-                <a th:href="@{ /profile/reply }" th:class="${ section } == 'reply' ? 'list-group-item active' : 'list-group-item'">最新回复<span class="badge">14</span></a>
+                <a th:href="@{ /profile/reply }" th:class="${ section } == 'reply' ? 'list-group-item active' : 'list-group-item'">最新回复<span class="badge">[[ ${ unreadCount } ]]</span></a>
                 <a href="#" class="list-group-item">Morbi leo risus</a>
                 <a href="#" class="list-group-item">Porta ac consectetur ac</a>
                 <a href="#" class="list-group-item">Vestibulum at eros</a>

@@ -30,7 +30,9 @@
             box-shadow: 10px 10px 5px #888888;
         }
 
+
     </style>
+    <link rel="stylesheet" href="/css/editormd.css"/>
 </head>
 <body>
 
@@ -58,22 +60,28 @@
                 <input type="hidden" name="id" th:value="${ id }">
                 <div class="form-group">
                     <label for="title">问题标题（简单摘要）：</label>
-                    <input name="title" type="text" class="form-control" id="title" placeholder="问题标题..." th:value="${ title }">
+                    <input name="title" type="text" class="form-control" id="title" placeholder="问题标题..."
+                           th:value="${ title }">
                 </div>
                 <br>
                 <div class="form-group">
                     <label for="description">问题补充（必填，请参照右侧提示）：</label>
-                    <textarea name="description" id="description" class="form-control" rows="20">[[ ${ description } ]]</textarea>
+
+                    <div id="question-editor">
+                        <textarea name="description" id="description" class="form-control" style="display:none;">[[ ${ description } ]]</textarea>
+                    </div>
                 </div>
                 <br>
                 <div class="form-group">
                     <label for="tag">添加标签：</label>
-                    <input onclick="toggleTags()" name="tag" type="text" class="form-control" readonly id="tag" placeholder="问题标签..." th:value="${ tag }">
+                    <input onclick="toggleTags()" name="tag" type="text" class="form-control" readonly id="tag"
+                           placeholder="问题标签..." th:value="${ tag }">
                     <br>
                     <div id="tags" class="col-md-9 panel panel-default" style="display: none; line-height: 30px">
                         <div class="panel-body">
-                            <span style="margin: 5px;" th:if="${ taglib != null }" th:each="atag : ${ taglib }" >
-                            <span th:if="!${ #strings.contains(tag, atag.tagName) }" onclick="selectTag(this)" class="label label-info">
+                            <span style="margin: 5px;" th:if="${ taglib != null }" th:each="atag : ${ taglib }">
+                            <span th:if="!${ #strings.contains(tag, atag.tagName) }" onclick="selectTag(this)"
+                                  class="label label-info">
                                 <span style="margin-right: 5px" class="glyphicon glyphicon-tag"></span>
                                 [[ ${ atag.tagName } ]]
                             </span>
@@ -83,7 +91,7 @@
                 </div>
                 <br>
                 <div class="form-group">
-                    <input type="submit" class="btn btn-success" style="float: right" value="发布问题" />
+                    <input type="submit" class="btn btn-success" style="float: right" value="发布问题"/>
                 </div>
 
             </form>
@@ -110,5 +118,15 @@
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+<script src="/js/editormd.min.js"></script>
+<script type="text/javascript">
+    $(function() {
+        var editor = editormd("question-editor", {
+            width  : "100%",
+            height : "700px",
+            path   : "/lib/"
+        });
+    });
+</script>
 </body>
 </html>

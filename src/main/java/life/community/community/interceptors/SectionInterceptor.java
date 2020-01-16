@@ -2,6 +2,7 @@ package life.community.community.interceptors;
 
 import life.community.community.entity.User;
 import life.community.community.mappers.UserMapper;
+import life.community.community.services.NotificationService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -15,6 +16,9 @@ public class SectionInterceptor implements HandlerInterceptor {
     @Autowired
     private UserMapper userMapper;
 
+    @Autowired
+    private NotificationService notificationService;
+
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         Cookie[] cookies = request.getCookies();
@@ -25,7 +29,7 @@ public class SectionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     user = userMapper.getUserByToken(cookie.getValue());
                     request.getSession().setAttribute("user", user);
-                    return true;
+                     return true;
                 }
             }
         }

@@ -1,10 +1,11 @@
 package life.community.community.controllers;
 
 
+import life.community.community.dto.NotificationDto;
 import life.community.community.dto.PaginationDto;
 import life.community.community.entity.User;
 import life.community.community.mappers.QuestionMapper;
-import life.community.community.mappers.UserMapper;
+import life.community.community.services.NotificationService;
 import life.community.community.services.QuestionService;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,8 +15,9 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-import javax.servlet.http.Cookie;
+
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Controller
 @RequestMapping("/profile")
@@ -26,6 +28,9 @@ public class ProfileController {
 
     @Autowired
     private QuestionService questionService;
+
+    @Autowired
+    private NotificationService notificationService;
 
     @Value("${github.client.id}")
     private String clientID;
@@ -38,7 +43,6 @@ public class ProfileController {
     public String question(@RequestParam(name = "page", defaultValue = "1") int page,
                            @NotNull HttpServletRequest request,
                            Model model) {
-
         User user = (User) request.getSession().getAttribute("user");
 
         if (page < 1 || page > Math.ceil(questionMapper.getUserQuestionCount(user.getId()) / 5.0)) {
@@ -47,11 +51,11 @@ public class ProfileController {
 
         PaginationDto paginationDto = questionService.getCurrentUserQuestion(user.getId(), page);
         model.addAttribute("paginationDto", paginationDto);
-
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
         model.addAttribute("section", "question");
         model.addAttribute("sectionname", "我的问题");
+        model.addAttribute("unreadCount", notificationService.getNotificationCountByReceiverId(user.getId()));
 
 
         return "profile";
@@ -60,14 +64,15 @@ public class ProfileController {
     @GetMapping("/reply")
     public String reply(@NotNull HttpServletRequest request,
                         Model model) {
-        Cookie[] cookies = request.getCookies();
-        User user = null;
+        User user = (User) request.getSession().getAttribute("user");
 
-
+        List<NotificationDto> notificationdtos = notificationService.getNotificationDtosByReceiverId(user.getId());
+        model.addAttribute("unreadNotifications", notificationdtos);
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
         model.addAttribute("section", "reply");
         model.addAttribute("sectionname", "最新回复");
+        model.addAttribute("unreadCount", notificationService.getNotificationCountByReceiverId(user.getId()));
 
 
         return "profile";

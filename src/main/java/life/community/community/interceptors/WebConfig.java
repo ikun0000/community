@@ -10,11 +10,17 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     @Autowired
-    SectionInterceptor sectionInterceptor;
+    private SectionInterceptor sectionInterceptor;
+
+    @Autowired
+    private UnReadCountInterceptor unReadCountInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(sectionInterceptor)
-                .addPathPatterns("/publish", "/profile/**", "/comment");
+                .addPathPatterns("/publish", "/profile/**", "/comment", "/notification/**");
+
+        registry.addInterceptor(unReadCountInterceptor)
+                .addPathPatterns("/**");
     }
 }
