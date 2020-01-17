@@ -2,7 +2,9 @@ package life.community.community.interceptors;
 
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.multipart.commons.CommonsMultipartResolver;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -22,5 +24,12 @@ public class WebConfig implements WebMvcConfigurer {
 
         registry.addInterceptor(unReadCountInterceptor)
                 .addPathPatterns("/**");
+    }
+
+    @Bean(name = "multipartResolver")
+    public CommonsMultipartResolver commonsMultipartResolver() {
+        CommonsMultipartResolver commonsMultipartResolver = new CommonsMultipartResolver();
+        commonsMultipartResolver.setMaxUploadSize(104857600);
+        return commonsMultipartResolver;
     }
 }

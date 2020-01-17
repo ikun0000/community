@@ -23,3 +23,7 @@ github:
     secret: d5ff10a423a34102e11b10425411f78bec36b939
   redirect:
     uri: http://localhost:8887/callback
+
+remote:
+  image:
+    url: http://192.168.118.133:8888/images/

@@ -1,5 +1,6 @@
 package life.community.community.interceptors;
 
+
 import life.community.community.entity.User;
 import life.community.community.mappers.UserMapper;
 import life.community.community.services.NotificationService;
@@ -30,6 +31,7 @@ public class UnReadCountInterceptor implements HandlerInterceptor {
                     user = userMapper.getUserByToken(cookie.getValue());
 
                     if (user != null) {
+                        request.getSession().setAttribute("user", user);
                         request.getSession().setAttribute("uReacCount", notificationService.getNotificationCountByReceiverId(user.getId()));
                     } else {
                         request.getSession().setAttribute("uReacCount", 0);

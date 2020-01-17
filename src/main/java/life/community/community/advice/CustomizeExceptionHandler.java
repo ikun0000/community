@@ -1,5 +1,6 @@
 package life.community.community.advice;
 
+import life.community.community.dto.FileDto;
 import life.community.community.dto.ResultDto;
 import life.community.community.exceptions.CustomizeException;
 import life.community.community.exceptions.QuestionNotFoundException;
@@ -9,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 
@@ -28,10 +30,20 @@ public class CustomizeExceptionHandler {
          return ResultDto.errorOf(ex);
     }
 
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    @ResponseBody
+    FileDto handleMaxUploadSizeExceededException(MaxUploadSizeExceededException ex) {
+        FileDto fileDto = new FileDto();
+        fileDto.setSuccess(0);
+        fileDto.setMessage(ex.getMessage());
+        return fileDto;
+    }
+
     @ExceptionHandler(Exception.class)
     ModelAndView unknowException(HttpServletRequest request, Throwable ex, @NotNull Model model) {
             model.addAttribute("message", "无法处理的异常");
         model.addAttribute("warnmsg", "网络安全法警告");
+        ex.printStackTrace();
         return new ModelAndView("exception");
     }
 
