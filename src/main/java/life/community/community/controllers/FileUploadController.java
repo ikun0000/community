@@ -6,7 +6,10 @@ import com.sun.jersey.api.client.ClientHandlerException;
 import com.sun.jersey.api.client.UniformInterfaceException;
 import com.sun.jersey.api.client.WebResource;
 import life.community.community.dto.FileDto;
+import life.community.community.provider.FastDFSProvider;
 import okhttp3.*;
+import org.apache.commons.lang3.StringUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.util.ResourceUtils;
@@ -22,8 +25,14 @@ import java.util.UUID;
 @Controller
 public class FileUploadController {
 
+    @Autowired
+    private FastDFSProvider fastDFSProvider;
+
     @Value("${remote.image.url}")
     private String url;
+
+    @Value("${fdfs.web-server-url}")
+    private String imageServerUrl;
 
     @RequestMapping("/file/upload")
     @ResponseBody
@@ -31,28 +40,29 @@ public class FileUploadController {
                                     @RequestParam("editormd-image-file") MultipartFile multipartFile) throws IOException {
         FileDto fileDto = new FileDto();
 
-        String filename = UUID.randomUUID().toString().replaceAll("-", "_")
-                + "__"
-                + multipartFile.getOriginalFilename();
+//        使用本地存储，PUT方式保存，WebResource才要打开
+//        String filename = UUID.randomUUID().toString().replaceAll("-", "_")
+//                + "__"
+//                + multipartFile.getOriginalFilename();
 
 
 //      本地上传 (dev)
-        File file = new File(ResourceUtils.getURL("classpath:static/upload").getPath()  + "/" + filename);
-        try {
-            multipartFile.transferTo(file);
-        } catch (IOException e) {
-            e.printStackTrace();
-            fileDto.setSuccess(0);
-            fileDto.setMessage("IO fail");
-        } catch (IllegalStateException e) {
-            e.printStackTrace();
-            fileDto.setSuccess(0);
-            fileDto.setMessage("Status error");
-        }
-
-        fileDto.setSuccess(1);
-        fileDto.setMessage("success");
-        fileDto.setUrl("/upload/" + filename);
+//        File file = new File(ResourceUtils.getURL("classpath:static/upload").getPath()  + "/" + filename);
+//        try {
+//            multipartFile.transferTo(file);
+//        } catch (IOException e) {
+//            e.printStackTrace();
+//            fileDto.setSuccess(0);
+//            fileDto.setMessage("IO fail");
+//        } catch (IllegalStateException e) {
+//            e.printStackTrace();
+//            fileDto.setSuccess(0);
+//            fileDto.setMessage("Status error");
+//        }
+//
+//        fileDto.setSuccess(1);
+//        fileDto.setMessage("success");
+//        fileDto.setUrl("/upload/" + filename);
 
 //        远程服务器上传
 //        try {
@@ -96,6 +106,17 @@ public class FileUploadController {
 //            fileDto.setSuccess(0);
 //            fileDto.setMessage(ex.getMessage());
 //        }
+
+        String resourceUrl = fastDFSProvider.uploadFile(multipartFile);
+        if (StringUtils.isBlank(resourceUrl)) {
+            fileDto.setSuccess(0);
+            fileDto.setMessage("upload to fastDFS fail");
+            fileDto.setUrl(null);
+        } else {
+            fileDto.setSuccess(1);
+            fileDto.setMessage("success");
+            fileDto.setUrl(imageServerUrl + resourceUrl);
+        }
 
         return fileDto;
     }

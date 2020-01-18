@@ -17,12 +17,24 @@ mybatis:
     map-underscore-to-camel-case: true
 
 
+fdfs:
+  so-timeout: 1500
+  connect-timeout: 600
+  pool:
+    max-total: 153
+    max-wait-millis: 102
+  tracker-list:
+    - 192.168.118.133:22122
+  web-server-url: http://192.168.118.133/
+
+
 github:
   client:
     id: 0422b4182360f93e910a
     secret: d5ff10a423a34102e11b10425411f78bec36b939
   redirect:
     uri: http://localhost:8887/callback
+
 
 remote:
   image:
