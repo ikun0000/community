@@ -25,6 +25,9 @@ public interface QuestionMapper {
     @Select("select count(id) from question")
     int getItemCount();
 
+    @Select("select count(id) from question where title regexp #{ search }")
+    int getItemCountBySearchQuestion(String search);
+
     @Select("select * from question order by gmt_create desc limit #{ offset }, 5")
     List<Question> getQuestionFromIndex(Integer offset);
 
@@ -37,10 +40,9 @@ public interface QuestionMapper {
     @Select("select * from question where tag regexp #{ reg } and id != #{ id }")
     List<Question> getQuestionsByRegexpAndExceptId(String reg, Integer id);
 
-    @Select("select * from question where title like concat('%', #{ search }, '%') or description like concat('%', #{ search }, '%')")
-    List<Question> getSearchQuestion(String search);
-
     @Update("update question set title = #{ title }, description = #{ description }, comment_count = #{ commentCount }, view_count = #{ viewCount }, like_count = #{ likeCount }, gmt_modify = now() where id = #{id}")
     void updateQuestionById(Question question);
 
+    @Select("select * from question where title regexp #{ search } limit #{ offset }, 5")
+    List<Question> getQuestionFromIndexAndSearch(Integer offset, String search);
 }

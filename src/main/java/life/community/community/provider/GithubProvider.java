@@ -3,11 +3,13 @@ package life.community.community.provider;
 import com.alibaba.fastjson.JSON;
 import life.community.community.dto.AccessTokenDto;
 import life.community.community.dto.GitHubUser;
+import lombok.extern.slf4j.Slf4j;
 import okhttp3.*;
 import org.springframework.stereotype.Component;
 import java.io.IOException;
 
 @Component
+@Slf4j
 public class GithubProvider {
 
     // 获取Github的access_token
@@ -25,8 +27,10 @@ public class GithubProvider {
             return string.split("&")[0].split("=")[1];
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         } catch (ArrayIndexOutOfBoundsException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
         return null;
     }
@@ -47,6 +51,7 @@ public class GithubProvider {
             return  gitHubUser;
         } catch (IOException e) {
             e.printStackTrace();
+            log.error(e.getMessage());
         }
 
         return null;

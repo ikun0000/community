@@ -5,6 +5,7 @@ import life.community.community.dto.PaginationDto;
 import life.community.community.mappers.QuestionMapper;
 import life.community.community.services.NotificationService;
 import life.community.community.services.QuestionService;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
@@ -30,14 +31,24 @@ public class IndexController {
 
     @GetMapping({ "/", "/index" })
     public String index(@RequestParam(name = "page", defaultValue = "1") int page,
+                        @RequestParam(name = "search", required = false, defaultValue = "") String search,
                         Model model) {
 
         if (page < 1 || page > Math.ceil(questionMapper.getItemCount() / 5.0)) {
             page = 1;
         }
 
-        PaginationDto paginationDto = questionService.getPage(page);
+        PaginationDto paginationDto = null;
+                questionService.getPage(page);
+
+        if (StringUtils.isBlank(search)) {
+            paginationDto = questionService.getPage(page);
+        } else {
+            paginationDto = questionService.getPageBySearchQuestion(page, search);
+        }
+
         model.addAttribute("paginationDto", paginationDto);
+        model.addAttribute("search", search);
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
         return "index";

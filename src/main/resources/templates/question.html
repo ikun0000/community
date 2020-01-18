@@ -129,7 +129,7 @@
                 <div class="media">
                     <div class="media-left">
                         <a href="#">
-                            <img class="media-object img-thumbnail" th:src="@{ /img/law.png }" alt="" style="width: 64px; height: 64px">
+                            <img class="media-object img-thumbnail" th:src="${ session.user != null ? session.user.avatarUrl : '/img/law.png' }" alt="" style="width: 64px; height: 64px">
                         </a>
                     </div>
                     <div class="media-body">
@@ -186,6 +186,9 @@
             </div>
         </div>
     </div>
+</div>
+
+<div th:replace="~{ navtemplate ::#footer }">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>

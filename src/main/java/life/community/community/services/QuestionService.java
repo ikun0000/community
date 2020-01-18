@@ -11,7 +11,6 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -122,6 +121,39 @@ public class QuestionService {
         paginationDto.setPagination(totalCount, page, 5);
 
         return paginationDto;
+    }
+
+    public PaginationDto getPageBySearchQuestion(Integer page, String search) {
+        PaginationDto paginationDto = new PaginationDto();
+        paginationDto.setCurrentPage(page);
+        paginationDto.setQuestionDtoList(getNumberPageSearchDto(page, search));
+
+        Integer totalCount = questionMapper.getItemCountBySearchQuestion(search);
+        paginationDto.setPagination(totalCount, page, 5);
+
+        return paginationDto;
+    }
+
+    private List<QuestionDto> getNumberPageSearchDto(Integer page, String search) {
+        List<Question> questionList = questionMapper.getQuestionFromIndexAndSearch((int) Math.ceil(5.0 * (page - 1)), search);
+
+        if (questionList == null) {
+            return null;
+        }
+
+        List<QuestionDto> questionDtoList = new ArrayList<QuestionDto>();
+        QuestionDto questionDto = null;
+        User user = null;
+
+        for (Question question : questionList) {
+            questionDto = new QuestionDto();
+            BeanUtils.copyProperties(question, questionDto);
+            user = userMapper.getUserById(question.getCreator());
+            questionDto.setUser(user);
+            questionDtoList.add(questionDto);
+        }
+
+        return questionDtoList;
     }
 
     public PaginationDto getCurrentUserQuestion(Integer id, Integer page) {

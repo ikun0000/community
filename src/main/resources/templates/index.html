@@ -79,13 +79,13 @@
                     </li>
 
                     <li th:if="${ paginationDto.hasPrevious }">
-                        <a th:href="@{ /index(page=${ paginationDto.currentPage - 1 }) }" aria-label="Previous">
+                        <a th:href="@{ /index(page=${ paginationDto.currentPage - 1 }, search=${ search }) }" aria-label="Previous">
                             <span aria-hidden="true">&laquo;</span>
                         </a>
                     </li>
 
                     <li th:each="pageNum : ${ paginationDto.currentPageList }" th:class="${ paginationDto.currentPage == pageNum } ? 'active'">
-                        <a th:href="@{ /index(page=${ pageNum }) }">[[ ${ pageNum } ]]</a>
+                        <a th:href="@{ /index(page=${ pageNum }, search=${ search }) }">[[ ${ pageNum } ]]</a>
                     </li>
 
                     <li th:if="${ not paginationDto.hasNext }" class="disabled">
@@ -95,7 +95,7 @@
                     </li>
 
                     <li th:if="${ paginationDto.hasNext }">
-                        <a th:href="@{ /index(page=${ paginationDto.currentPage + 1 }) }" aria-label="Next">
+                        <a th:href="@{ /index(page=${ paginationDto.currentPage + 1 }, search=${ search }) }" aria-label="Next">
                             <span aria-hidden="true">&raquo;</span>
                         </a>
                     </li>
@@ -109,6 +109,9 @@
             <hr>
         </div>
     </div>
+</div>
+
+<div th:replace="~{ navtemplate ::#footer }">
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/jquery@1.12.4/dist/jquery.min.js"></script>
