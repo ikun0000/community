@@ -1,5 +1,6 @@
 package life.community.community.interceptors;
 
+
 import life.community.community.entity.User;
 import life.community.community.mappers.UserMapper;
 import life.community.community.services.NotificationService;
@@ -10,6 +11,11 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 这个拦截器判断用户的登录状态
+ * 如果登录在session设置user
+ * 如果没有登录则返回跳转信息
+ */
 @Component
 public class SectionInterceptor implements HandlerInterceptor {
 
@@ -29,11 +35,12 @@ public class SectionInterceptor implements HandlerInterceptor {
                 if (cookie.getName().equals("token")) {
                     user = userMapper.getUserByToken(cookie.getValue());
                     request.getSession().setAttribute("user", user);
-                     return true;
+                    return true;
                 }
             }
         }
 
+        // 对请求二级评论不需要判断登录状态
         if (request.getRequestURI().equals("/comment")) {
             return true;
         }

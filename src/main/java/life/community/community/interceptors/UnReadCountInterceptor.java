@@ -11,6 +11,9 @@ import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+/**
+ * 这个拦截器用来设置登录用户的未读通知数
+ */
 @Component
 public class UnReadCountInterceptor implements HandlerInterceptor {
 

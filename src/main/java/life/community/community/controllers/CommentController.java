@@ -20,15 +20,23 @@ public class CommentController {
     @Autowired
     private CommentService commentService;
 
+    /**
+     * 提供评论功能的API，根据用户的评论生成通知信息
+     * @param commentDtoCreate  包含了评论对象的ID，评论类型，评论内容
+     * @param request
+     * @return                  失败成功都返回ResultDto
+     */
     @PostMapping("/comment")
     public Object post(@RequestBody CommentDtoCreate commentDtoCreate,
                        HttpServletRequest request) {
 
+        // 查看用户是否登录
         User user = (User) request.getSession().getAttribute("user");
         if (user == null) {
             return ResultDto.errorOf(CustomizeErrorCode.NO_LOGIN);
         }
 
+        // 判断评论内容的合法性
         if (commentDtoCreate == null
                 || StringUtils.isBlank(commentDtoCreate.getContext())) {
             return ResultDto.errorOf(CustomizeErrorCode.CONTENT_IS_EMPTY);
@@ -43,6 +51,11 @@ public class CommentController {
         return ResultDto.successOf();
     }
 
+    /**
+     * 获取指定ID评论的二级评论，返回一个成功的ResultDto和所有的二级评论
+     * @param id    评论的ID
+     * @return      返回ResultDto中封装二级评论的列表
+     */
     @GetMapping("/comment/{id}")
     public ResultDto post2(@PathVariable("id") Integer id ) {
         List<CommentDto> resultDtoList = commentService.getCommentsByCommentId(id);

@@ -38,8 +38,13 @@ public class CommentService {
     private NotificationService notificationService;
 
 
+    /**
+     * 添加一条评论
+     * @param comment
+     */
     @Transactional
     public void addNewComment(Comment comment) {
+        // 判断评论的合法性
         if (comment.getParentId() == null || comment.getParentId() <= 0) {
             throw new CustomizeException(CustomizeErrorCode.TARGET_PARAM_NOT_FOUND);
         }
@@ -48,7 +53,10 @@ public class CommentService {
             throw new CustomizeException(CustomizeErrorCode.TYPE_PARAM_WARN);
         }
 
+        // 验证通过
+        // 同时给指定用户发送通知
         if (comment.getType() == CommentTypeEnum.COMMENT.getType()) {
+            // 评论了评论
             Comment dbComment = commentMapper.getCommentById(comment.getParentId());
             if (dbComment == null) {
                 throw new CustomizeException(CustomizeErrorCode.COMMENT_NOT_FOUND);
@@ -56,6 +64,7 @@ public class CommentService {
             incCommentCount(dbComment.getId());
             notificationService.addANotification(NotificationTypeEnum.REPLY_COMMENT.getType(), comment.getCommentator(), dbComment.getCommentator(), comment.getParentId());
         } else {
+            // 评论了问题
             Question question = questionMapper.getQuestionById(comment.getParentId());
             if (question == null) {
                 throw new CustomizeException(CustomizeErrorCode.QUESTION_NOT_FOUND);
@@ -67,6 +76,10 @@ public class CommentService {
         commentMapper.addNewComment(comment);
     }
 
+    /**
+     * 增加指定文章的阅读数
+     * @param id        文章的ID
+     */
     @Transactional
     public void incLikeCount(Integer id) {
         Comment comment = commentMapper.getCommentById(id);
@@ -78,6 +91,10 @@ public class CommentService {
 
     }
 
+    /**
+     * 增加评论数
+     * @param id    评论的ID
+     */
     @Transactional
     public void incCommentCount(Integer id) {
         Comment comment = commentMapper.getCommentById(id);
@@ -88,6 +105,11 @@ public class CommentService {
         }
     }
 
+    /**
+     * 根据问题的ID获取它所有的一级评论
+     * @param id        问题的ID
+     * @return          一级评论列表
+     */
     public List<CommentDto> getCommentsByQuestionId(Integer id) {
         List<Comment> firstLevelReviewByQuestionId = commentMapper.getFirstLevelReviewByQuestionId(id);
         List<CommentDto> commentDtoList = new ArrayList<CommentDto>();
@@ -107,6 +129,11 @@ public class CommentService {
         return commentDtoList;
     }
 
+    /**
+     * 获取指定一级评论ID的二级评论
+     * @param id        一级评论的ID
+     * @return          所属一级平路的二级评论的列表
+     */
     public List<CommentDto> getCommentsByCommentId(Integer id) {
         List<Comment> secondaryReviewByParentId = commentMapper.getSecondaryReviewByParentId(id);
         List<CommentDto> commentDtoList = new ArrayList<CommentDto>();

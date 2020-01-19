@@ -1,8 +1,4 @@
 
-$(document).ready(function() {
-
-});
-
 // 提交回复
 function postReply() {
     var questionId = $("#question_id").val();
@@ -69,7 +65,7 @@ function callapseComments(self) {
 
             $(replys).empty();
 
-            $.each( resp.data, function( key, val ) {
+            $.each( resp.data, function(key, val) {
                 var dateObj = new Date(val.gmtCreate);
                 var dateText = dateObj.getFullYear() + "-" + ( dateObj.getMonth() + 1 ) + "-" + dateObj.getDate();
                 var html = "<div class='media' >" +

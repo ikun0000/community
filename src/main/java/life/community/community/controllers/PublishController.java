@@ -1,9 +1,9 @@
 package life.community.community.controllers;
 
+
 import life.community.community.dto.QuestionDto;
 import life.community.community.entity.Question;
 import life.community.community.entity.User;
-import life.community.community.mappers.UserMapper;
 import life.community.community.services.QuestionService;
 import life.community.community.services.TagLibService;
 import org.jetbrains.annotations.NotNull;
@@ -32,6 +32,11 @@ public class PublishController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
+    /**
+     * 当用户点击评论时触发，只返回页面
+     * @param model
+     * @return
+     */
     @GetMapping("/publish")
     public String getPublish(@NotNull Model model) {
         model.addAttribute("clientID", clientID);
@@ -44,6 +49,12 @@ public class PublishController {
         return "publish";
     }
 
+    /**
+     * 用户编辑时触发，返回评论页，并且带上指定问题的内容
+     * @param id        问题的ID
+     * @param model
+     * @return      如果没有找到问题会重定向到首页
+     */
     @GetMapping("/publish/{id}")
     public String edit(@PathVariable("id") Integer id,
                        Model model) {
@@ -63,6 +74,16 @@ public class PublishController {
         return "publish";
     }
 
+    /**
+     * 用户点击提交问题时触发
+     * @param title         问题的标题
+     * @param description   问题的实体
+     * @param tag           给问题打上的标签
+     * @param id            根据ID判断是修改后的提交还是新提交，如果为空则新建文章，否则修改对应id的文章
+     * @param request
+     * @param model
+     * @return
+     */
     @PostMapping("/publish")
     public String postPublish(@RequestParam("title") String title,
                               @RequestParam("description") String description,
@@ -73,19 +94,20 @@ public class PublishController {
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
 
+        // 判断内容的合法性，如果不合法返回信息到前端展示给用户
         if (title == null || description == null || tag == null ||
         title.isEmpty() || description.isEmpty() || tag.isEmpty()) {
             model.addAttribute("title", title);
             model.addAttribute("description", description);
             model.addAttribute("tag", tag);
+            // 展示信息
             model.addAttribute("warn", "内容不完整");
             model.addAttribute("taglib", tagLibService.getAllTag());
             return "publish";
         }
 
-
+        // 只有登录的用户才可以发出问题
         User user = (User) request.getSession().getAttribute("user");
-
         if (user != null) {
             Question question = new Question();
             question.setId(id);
@@ -99,6 +121,7 @@ public class PublishController {
             questionService.addNewQuestionOrUpdateQuestion(question);
             return "redirect:/index";
         } else {
+            // 向publish页面展示用户未登录信息
             model.addAttribute("error", "用户未登录");
             return "publish";
         }

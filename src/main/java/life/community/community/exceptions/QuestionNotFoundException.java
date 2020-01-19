@@ -1,5 +1,8 @@
 package life.community.community.exceptions;
 
+/**
+ * 关于问题的异常
+ */
 public class QuestionNotFoundException extends RuntimeException {
     private String message;
     private Integer code;

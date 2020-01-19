@@ -1,5 +1,6 @@
 package life.community.community.provider;
 
+
 import com.alibaba.fastjson.JSON;
 import life.community.community.dto.AccessTokenDto;
 import life.community.community.dto.GitHubUser;
@@ -12,7 +13,11 @@ import java.io.IOException;
 @Slf4j
 public class GithubProvider {
 
-    // 获取Github的access_token
+    /**
+     * 获取用户的access token
+     * @param accessTokenDto    获取access token的必要参数的类
+     * @return                  返回access token
+     */
     public String getAccessToken(AccessTokenDto accessTokenDto) {
         MediaType mediaType = MediaType.get("application/json; charset=utf-8");
         OkHttpClient client = new OkHttpClient();
@@ -36,7 +41,11 @@ public class GithubProvider {
     }
 
 
-    // 获取用户信息
+    /**
+     * 根据access token获取用户信息
+     * @param accessToken       access token
+     * @return                  返回的用户信息（后期可以添加）
+     */
     public GitHubUser getUser(String accessToken) {
         OkHttpClient client = new OkHttpClient();
 

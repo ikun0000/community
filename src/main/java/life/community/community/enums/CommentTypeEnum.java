@@ -1,7 +1,8 @@
 package life.community.community.enums;
 
-import life.community.community.entity.Comment;
-
+/**
+ * 评论类型的枚举
+ */
 public enum CommentTypeEnum {
     QUESTION(1),
     COMMENT(2);

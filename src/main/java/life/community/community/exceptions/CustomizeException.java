@@ -1,5 +1,8 @@
 package life.community.community.exceptions;
 
+/**
+ * 统一的用户异常的类
+ */
 public class CustomizeException extends RuntimeException {
     private String message;
     private Integer code;

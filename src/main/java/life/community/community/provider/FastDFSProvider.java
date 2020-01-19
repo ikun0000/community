@@ -24,6 +24,11 @@ public class FastDFSProvider {
     private FdfsWebServer fdfsWebServer;
 
 
+    /**
+     * 上传文件到FastDFS服务器
+     * @param multipartFile     spring MVC的上传文件对象
+     * @return                  文件访问的URI
+     */
     public String uploadFile(MultipartFile multipartFile) {
         try {
             StorePath storePath = fastFileStorageClient.uploadFile(multipartFile.getInputStream(),

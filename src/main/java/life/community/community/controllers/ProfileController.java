@@ -15,10 +15,12 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * 用户点击左上角的统一用户信息页
+ */
 @Controller
 @RequestMapping("/profile")
 public class ProfileController {
@@ -39,6 +41,13 @@ public class ProfileController {
     private String redirectUri;
 
 
+    /**
+     * 获取用户提问的问题
+     * @param page          和首页一样的页数
+     * @param request
+     * @param model
+     * @return
+     */
     @GetMapping("/question")
     public String question(@RequestParam(name = "page", defaultValue = "1") int page,
                            @NotNull HttpServletRequest request,
@@ -53,14 +62,23 @@ public class ProfileController {
         model.addAttribute("paginationDto", paginationDto);
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
+        // thymeleaf根据section选择适合的div块展示
         model.addAttribute("section", "question");
+        // thymeleaf展示在div块左上角的文本
         model.addAttribute("sectionname", "我的问题");
+        // 设置用户的未读通知数
         model.addAttribute("unreadCount", notificationService.getNotificationCountByReceiverId(user.getId()));
 
 
         return "profile";
     }
 
+    /**
+     * 用户点击通知
+     * @param request
+     * @param model
+     * @return
+     */
     @GetMapping("/reply")
     public String reply(@NotNull HttpServletRequest request,
                         Model model) {
@@ -70,6 +88,7 @@ public class ProfileController {
         model.addAttribute("unreadNotifications", notificationdtos);
         model.addAttribute("clientID", clientID);
         model.addAttribute("redirectUri", redirectUri);
+        // 下面三个同上
         model.addAttribute("section", "reply");
         model.addAttribute("sectionname", "最新回复");
         model.addAttribute("unreadCount", notificationService.getNotificationCountByReceiverId(user.getId()));

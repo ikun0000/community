@@ -1,5 +1,8 @@
 package life.community.community.exceptions;
 
+/**
+ * 统一处理的用户异常的枚举
+ */
 public enum CustomizeErrorCode implements ICustomizeErrorCode {
     QUESTION_NOT_FOUND(2001, "问题没有找到"),
     TARGET_PARAM_NOT_FOUND(2002, "未选中问题回复"),

@@ -38,6 +38,14 @@ public class AuthorizeController {
     @Value("${github.redirect.uri}")
     private String redirectUri;
 
+    /**
+     * 处理Github授权登录成功后的操作，主要是获取授权用户的Github用户名，用户ID，用户头像地址，bio
+     * @param code      Github返回的code
+     * @param state     原本登录页面随机生成的state由Github再发送回来
+     * @param request
+     * @param response
+     * @return          登录成功或失败都返回index
+     */
     @GetMapping("/callback")
     public String callback(@RequestParam(name = "code") String code,
                            @RequestParam(name = "state") String state,
@@ -57,7 +65,6 @@ public class AuthorizeController {
 
         if (gitHubUser != null && gitHubUser.getId() != null) {
             // 登陆成功
-            // request.getSession().setAttribute("user", gitHubUser);
 
             String token = UUID.randomUUID().toString();
             User user = new User();
@@ -79,6 +86,12 @@ public class AuthorizeController {
         }
     }
 
+    /**
+     * 用户发出退出登录请求，清空cookie和session
+     * @param request
+     * @param response
+     * @return
+     */
     @GetMapping("/logout")
     public String logout(HttpServletRequest request, HttpServletResponse response) {
         request.getSession().removeAttribute("user");
